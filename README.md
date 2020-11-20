@@ -9,16 +9,20 @@ This program can be used to see how different color codes will look together wit
 0. Be sure, that you have installed SFML library.
 1. Open terminal in directory of the project
 2. Paste the following commands:
-  g++ -c main.cpp
-  g++ main.o -o main -lsfml-window -lsfml-graphics -lsfml-system
+```
+   g++ -c main.cpp
+   g++ main.o -o main -lsfml-window -lsfml-graphics -lsfml-system
+```
 3. In order to run compiled program type this in terminal:
+```
    chmod u+x main
+```
 
 # RUNNING:
 Type:
 ./main (ID) (ID) (ID)
  
-# ID means color code from 0 to 16, which is used by 3 stripes on the flag.
+ **ID means color code from 0 to 16, which is used by 3 stripes on the flag.
 
 # LIST OF THE IDs:
   0   	Argent (White )
