@@ -22,7 +22,7 @@ This program can be used to see how different color codes will look together wit
 Type:
 ./main (ID) (ID) (ID)
  
- **ID means color code from 0 to 16, which is used by 3 stripes on the flag.
+ID means color code from 0 to 16, which is used by 3 stripes on the flag.
 
 # LIST OF THE IDs:
   0   	Argent (White )
