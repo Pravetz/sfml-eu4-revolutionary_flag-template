@@ -25,6 +25,7 @@ Type:
 ID means color code from 0 to 16, which is used by 3 stripes on the flag.
 
 # LIST OF THE IDs:
+```
   0   	Argent (White )
   1   	Sable (Black)
   2   	Purple
@@ -42,5 +43,6 @@ ID means color code from 0 to 16, which is used by 3 stripes on the flag.
   14		Bleu-Celeste (Sky Blue)
   15		Reflex Blue variant (darker than current french)
   16		Red 032 variant (darker than current french)
- 
+```
+
 Color codes are taken from the official EU4 wiki: https://eu4.paradoxwikis.com/Template:Revolutionary_flag
