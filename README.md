@@ -20,9 +20,10 @@ This program can be used to see how different color codes will look together wit
 
 # RUNNING:
 Type:
-./main (ID) (ID) (ID)
+./main (ID) (ID) (ID) (SAVE_INT)
  
 ID means color code from 0 to 16, which is used by 3 stripes on the flag.
+SAVE_INT is a value from 0 to 1. 0 means that generated flag will not be saved to a file, 1 means that it will be saved as file.png
 
 # LIST OF THE IDs:
 ```
