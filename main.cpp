@@ -8,6 +8,7 @@ int w = 300, h = 200;
 int p;
 int p1;
 int p2;
+int save_int = 0;
 
 int main(int argc, char** argv)
 {
@@ -18,6 +19,7 @@ int main(int argc, char** argv)
 	p = atoi(argv[1]);
 	p1 = atoi(argv[2]);
 	p2 = atoi(argv[3]);
+	save_int = atoi(argv[4]);
 	
 	std::cout <<"Generate IDs: "<<p<<" "<<p1<<" "<<p2<<std::endl;
 	if(p>16||p<0||p1>16||p1<0||p2>16||p2<0){
@@ -26,7 +28,7 @@ int main(int argc, char** argv)
 	
 	sf::RenderTexture texture;
 	
-	if (!texture.create(500, 500))
+	if (!texture.create(300, 200))
 	{
 		return -1;
 	}
@@ -220,6 +222,9 @@ int main(int argc, char** argv)
 	texture.draw(s2);
 	
 	texture.display();
+	if(save_int == 1){
+		texture.getTexture().copyToImage().saveToFile("flag.png");
+	}
 	
 	app.clear(sf::Color(220,220,220));
 	
@@ -229,5 +234,10 @@ int main(int argc, char** argv)
     app.draw(sprite);
     app.display();
         }
+    
+    if(save_int == 1){
+		std::cout <<"|^| Saved revolutionary flag to the flag.png file."<<std::endl;
+	}
+    
 	return 0;
 }
