@@ -23,7 +23,7 @@ int main(int argc, char** argv)
 	
 	std::cout <<"Generate IDs: "<<p<<" "<<p1<<" "<<p2<<std::endl;
 	if(p>16||p<0||p1>16||p1<0||p2>16||p2<0){
-		std::cout <<"! ERROR: some IDs are invalid, therefore generation could be incorrect !"<<std::endl;
+		std::cout <<"[!] ERROR: some IDs are invalid, therefore generation could be incorrect [!]"<<std::endl;
 	}
 	
 	sf::RenderTexture texture;
@@ -222,8 +222,11 @@ int main(int argc, char** argv)
 	texture.draw(s2);
 	
 	texture.display();
+	
+	std::string SAVED_FILENAME = std::to_string(p)+" "+std::to_string(p1)+" "+std::to_string(p2)+" "+".png";
+	
 	if(save_int == 1){
-		texture.getTexture().copyToImage().saveToFile("flag.png");
+		texture.getTexture().copyToImage().saveToFile(SAVED_FILENAME);
 	}
 	
 	app.clear(sf::Color(220,220,220));
@@ -236,7 +239,7 @@ int main(int argc, char** argv)
         }
     
     if(save_int == 1){
-		std::cout <<"|^| Saved revolutionary flag to the flag.png file."<<std::endl;
+		std::cout <<"|^| Saved revolutionary flag."<<std::endl;
 	}
     
 	return 0;
