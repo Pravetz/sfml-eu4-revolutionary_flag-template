@@ -23,7 +23,7 @@ Type:
 ./main (ID) (ID) (ID) (SAVE_INT)
  
 ID means color code from 0 to 16, which is used by 3 stripes on the flag.
-SAVE_INT is a value from 0 to 1. 0 means that generated flag will not be saved to a file, 1 means that it will be saved as flag.png
+SAVE_INT is a value from 0 to 1. 0 means that generated flag will not be saved to a file, 1 means that it will be saved as (id) (id) (id).png
 
 # LIST OF THE IDs:
 ```
