@@ -1,3 +1,5 @@
+![rev_flag](https://user-images.githubusercontent.com/46265909/127778066-1816eb66-0fa1-4546-824b-b500c39f8944.png)
+
 # sfml-eu4-revolutionary_flag-template
 Simple C++/SFML program, which generates revolutionary flags based on color IDs from Europa Universalis IV.
 There shouldn't be problems with running on any Linux distribution, compatibility with other operating systems is not tested.
