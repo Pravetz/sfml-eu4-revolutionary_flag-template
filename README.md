@@ -47,4 +47,3 @@ SAVE_INT is a value from 0 to 1. 0 means that generated flag will not be saved t
 ```
 
 Color codes are taken from the official EU4 wiki: https://eu4.paradoxwikis.com/Template:Revolutionary_flag
-![flaggen](https://user-images.githubusercontent.com/46265909/127777984-41d38ce3-f84b-475e-9224-87794ae8ca06.png)
