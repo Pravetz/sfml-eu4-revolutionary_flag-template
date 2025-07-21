@@ -1,219 +1,86 @@
-#include <SFML/Graphics.hpp>
+/*
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ * 
+ */
+
 #include <iostream>
+#include <unordered_map>
+#include <fstream>
 
+#include "include/color_parser.hpp"
+#include "include/settings_parser.hpp"
 
-using namespace sf;
+#define ALLOCATE_SPRITE_AT(s, pos) s.setPosition((w / 3) * pos, 0)
 
-int w = 300, h = 200;
-int p;
-int p1;
-int p2;
-int save_int = 0;
-
-int main(int argc, char** argv)
-{
-	using namespace std;
-	
-	sf::RenderWindow app(sf::VideoMode(w, h, 32), "SFML Revolutionary flag template");
-	
-	p = atoi(argv[1]);
-	p1 = atoi(argv[2]);
-	p2 = atoi(argv[3]);
-	save_int = atoi(argv[4]);
-	
-	std::cout <<"Generate IDs: "<<p<<" "<<p1<<" "<<p2<<std::endl;
-	if(p>16||p<0||p1>16||p1<0||p2>16||p2<0){
-		std::cout <<"[!] ERROR: some IDs are invalid, therefore generation could be incorrect [!]"<<std::endl;
+int main(int argc, char** argv){
+	parsed_config cfg = parse_config("assets/settings.cfg");
+	parsed_colors colors = parse_colors("assets/colors.txt");
+	int32_t w = cfg.values.at("w").data.integer;
+	int32_t h = cfg.values.at("h").data.integer;
+	int32_t bpp = cfg.values.at("bpp").data.integer;
+	int32_t save_int = cfg.values.at("save").data.integer;
+	for(const auto &error : cfg.errors){
+		LOGERROR(error);
 	}
+	for(const auto &error : colors.errors){
+		LOGERROR(error);
+	}
+	if(!cfg.errors.empty() || !colors.errors.empty()){
+		return EXIT_FAILURE;
+	}
+	
+	sf::RenderWindow app(sf::VideoMode(w, h, bpp), "SFML Revolutionary flag template by Pravetz");
+	
+	int stripe_colors[] = {0, 0, 0};
+	for(int i = 1; i < argc && i < 4; i++){
+		if(is_numerical(argv[i])){
+			stripe_colors[i - 1] = std::atoi(argv[i]);
+		}
+		else{
+			LOGERROR(argv[i]<<" is not an integer, using default value 0 for stripe №"<<i);
+		}
+	}
+	
+	LOGINFO("Generate IDs: "<<stripe_colors[0]<<" "<<stripe_colors[1]<<" "<<stripe_colors[2]);
 	
 	sf::RenderTexture texture;
 	
-	if (!texture.create(300, 200))
-	{
-		return -1;
+	if (!texture.create(w, h)){
+		return EXIT_FAILURE;
 	}
 	
-	Texture sector;
+	sf::Image stripe_image;
+	stripe_image.create(w / 3, h, sf::Color::White);
 	
-	sector.loadFromFile("assets/sectr.png");
+	sf::Texture stripe;
+	if(!stripe.loadFromImage(stripe_image)){
+		return EXIT_FAILURE;
+	}
 	
-	Sprite s(sector);
-	Sprite s1(sector);
-	Sprite s2(sector);
+	sf::Sprite s(stripe);
+	sf::Sprite s1(stripe);
+	sf::Sprite s2(stripe);
 	
-	if(p==0){
-		s.setColor(sf::Color::White);	//Argent (White)
-		}
-	if(p==1){
-		s.setColor(sf::Color(0, 0, 0, 200));	//Sable (Black)
-		}
-	if(p==2){
-		s.setColor(sf::Color(117, 38, 143, 200));	//Purple
-		}
-	if(p==3){
-		s.setColor(sf::Color(113, 11, 43, 200));	//Murrey (Mulberry) Burgundy
-		}
-	if(p==4){
-		s.setColor(sf::Color(97, 12, 12, 200));	//Sanguine (Blood Red)
-		}
-	if(p==5){
-		s.setColor(sf::Color(175, 15, 15, 200));	//Gules (Red)
-		}
-	if(p==6){
-		s.setColor(sf::Color(188, 90, 27, 200));	//Tenné (Tawny aka orange)
-		}
-	if(p==7){
-		s.setColor(sf::Color(64, 40, 22, 200));	//Brown
-		}
-	if(p==8){
-		s.setColor(sf::Color(244, 184, 12, 200));	//Or (Gold)
-		}
-	if(p==9){
-		s.setColor(sf::Color(17, 53, 13, 200));	//Dark green
-		}
-	if(p==10){
-		s.setColor(sf::Color(46, 114, 55, 200));	//Vert (Light Green)
-		}
-	if(p==11){
-		s.setColor(sf::Color(18, 179, 113, 200));	//Teal
-		}
-	if(p==12){
-		s.setColor(sf::Color(50, 173, 192, 200));	//Turqouise
-		}
-	if(p==13){
-		s.setColor(sf::Color(30, 30, 128, 200));	//Azure ( Blue)
-		}
-	if(p==14){
-		s.setColor(sf::Color(116, 198, 240, 200));	//Bleu-Celeste (Sky Blue)
-		}
-	if(p==15){
-		s.setColor(sf::Color(0, 68, 131, 200));	//Reflex Blue variant (darker than current french)
-		}
-	if(p==16){
-		s.setColor(sf::Color(200, 48, 40, 200));	//Red 032 variant (darker than current french)
-		}
+	ALLOCATE_SPRITE_AT(s, 0);
+	ALLOCATE_SPRITE_AT(s1, 1);
+	ALLOCATE_SPRITE_AT(s2, 2);
 	
-	
-	
-	if(p1==0){
-		s1.setColor(sf::Color::White);	//Argent (White)
-		}
-	if(p1==1){
-		s1.setColor(sf::Color(0, 0, 0, 200));	//Sable (Black)
-		}
-	if(p1==2){
-		s1.setColor(sf::Color(117, 38, 143, 200));	//Purple
-		}
-	if(p1==3){
-		s1.setColor(sf::Color(113, 11, 43, 200));	//Murrey (Mulberry) Burgundy
-		}
-	if(p1==4){
-		s1.setColor(sf::Color(97, 12, 12, 200));	//Sanguine (Blood Red)
-		}
-	if(p1==5){
-		s1.setColor(sf::Color(175, 15, 15, 200));	//Gules (Red)
-		}
-	if(p1==6){
-		s1.setColor(sf::Color(188, 90, 27, 200));	//Tenné (Tawny aka orange)
-		}
-	if(p1==7){
-		s1.setColor(sf::Color(64, 40, 22, 200));	//Brown
-		}
-	if(p1==8){
-		s1.setColor(sf::Color(244, 184, 12, 200));	//Or (Gold)
-		}
-	if(p1==9){
-		s1.setColor(sf::Color(17, 53, 13, 200));	//Dark green
-		}
-	if(p1==10){
-		s1.setColor(sf::Color(46, 114, 55, 200));	//Vert (Light Green)
-		}
-	if(p1==11){
-		s1.setColor(sf::Color(18, 179, 113, 200));	//Teal
-		}
-	if(p1==12){
-		s1.setColor(sf::Color(50, 173, 192, 200));	//Turqouise
-		}
-	if(p1==13){
-		s1.setColor(sf::Color(30, 30, 128, 200));	//Azure ( Blue)
-		}
-	if(p1==14){
-		s1.setColor(sf::Color(116, 198, 240, 200));	//Bleu-Celeste (Sky Blue)
-		}
-	if(p1==15){
-		s1.setColor(sf::Color(0, 68, 131, 200));	//Reflex Blue variant (darker than current french)
-		}
-	if(p1==16){
-		s1.setColor(sf::Color(200, 48, 40, 200));	//Red 032 variant (darker than current french)
-		}
-	
-	
-	
-	if(p2==0){
-		s2.setColor(sf::Color::White);	//Argent (White)
-		}
-	if(p2==1){
-		s2.setColor(sf::Color(0, 0, 0, 200));	//Sable (Black)
-		}
-	if(p2==2){
-		s2.setColor(sf::Color(117, 38, 143, 200));	//Purple
-		}
-	if(p2==3){
-		s2.setColor(sf::Color(113, 11, 43, 200));	//Murrey (Mulberry) Burgundy
-		}
-	if(p2==4){
-		s2.setColor(sf::Color(97, 12, 12, 200));	//Sanguine (Blood Red)
-		}
-	if(p2==5){
-		s2.setColor(sf::Color(175, 15, 15, 200));	//Gules (Red)
-		}
-	if(p2==6){
-		s2.setColor(sf::Color(188, 90, 27, 200));	//Tenné (Tawny aka orange)
-		}
-	if(p2==7){
-		s2.setColor(sf::Color(64, 40, 22, 200));	//Brown
-		}
-	if(p2==8){
-		s2.setColor(sf::Color(244, 184, 12, 200));	//Or (Gold)
-		}
-	if(p2==9){
-		s2.setColor(sf::Color(17, 53, 13, 200));	//Dark green
-		}
-	if(p2==10){
-		s2.setColor(sf::Color(46, 114, 55, 200));	//Vert (Light Green)
-		}
-	if(p2==11){
-		s2.setColor(sf::Color(18, 179, 113, 200));	//Teal
-		}
-	if(p2==12){
-		s2.setColor(sf::Color(50, 173, 192, 200));	//Turqouise
-		}
-	if(p2==13){
-		s2.setColor(sf::Color(30, 30, 128, 200));	//Azure ( Blue)
-		}
-	if(p2==14){
-		s2.setColor(sf::Color(116, 198, 240, 200));	//Bleu-Celeste (Sky Blue)
-		}
-	if(p2==15){
-		s2.setColor(sf::Color(0, 68, 131, 200));	//Reflex Blue variant (darker than current french)
-		}
-	if(p2==16){
-		s2.setColor(sf::Color(200, 48, 40, 200));	//Red 032 variant (darker than current french)
-		}
-	
-	s.setPosition(0,0);
-	s1.setPosition(100,0);
-	s2.setPosition(200,0);
-	
-	while (app.isOpen())
-    {
-        sf::Event event;
-        while (app.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-                app.close();
-        }
-	
+	s.setColor(get_color_from(colors, stripe_colors[0]));
+	s1.setColor(get_color_from(colors, stripe_colors[1]));
+	s2.setColor(get_color_from(colors, stripe_colors[2]));
 	
 	texture.clear(sf::Color::Black);
 	
@@ -221,26 +88,35 @@ int main(int argc, char** argv)
 	texture.draw(s1);
 	texture.draw(s2);
 	
-	texture.display();
+	while (app.isOpen()){
+		sf::Event event;
+        while (app.pollEvent(event)){
+			if (event.type == sf::Event::Closed || sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)){
+				app.close();
+			}
+		}
 	
-	std::string SAVED_FILENAME = std::to_string(p)+" "+std::to_string(p1)+" "+std::to_string(p2)+" "+".png";
+		texture.display();
 	
+		app.clear(sf::Color::White);
+	
+		sf::Sprite sprite(texture.getTexture());
+	
+		app.draw(sprite);
+		app.display();
+	}
+	
+	std::string SAVED_FILENAME = cfg.values.at("save_path").data.str
+							   + std::to_string(stripe_colors[0]) + " "
+							   + std::to_string(stripe_colors[1]) + " "
+							   + std::to_string(stripe_colors[2]) + ".png";
 	if(save_int == 1){
 		texture.getTexture().copyToImage().saveToFile(SAVED_FILENAME);
+		LOGSUCCESS("Successfully saved revolutionary flag to file \'"<<SAVED_FILENAME<<'\'');
 	}
-	
-	app.clear(sf::Color(220,220,220));
-	
-	
-    Sprite sprite(texture.getTexture());
-    
-    app.draw(sprite);
-    app.display();
-        }
-    
-    if(save_int == 1){
-		std::cout <<"|^| Saved revolutionary flag."<<std::endl;
+	if(cfg.damaged){
+		LOGINFO("it appears that program config was damaged or deleted, saving repaired version...");
+		save_config(cfg, "assets/settings.cfg");
 	}
-    
-	return 0;
+	return EXIT_SUCCESS;
 }

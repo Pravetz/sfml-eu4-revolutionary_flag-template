@@ -1,0 +1,17 @@
+RGBA255						# Argent (White)
+RGB0, A255					# Sable (Black)
+R117, G38, B143, A255   	# Purple
+R113, G11, B43, A255  	  	# Murrey (Mulberry) Burgundy
+R97, G12, B12, A255   		# Sanguine (Blood Red)
+R175, G15, B15, A255   		# Gules (Red)
+R188, G90, B27, A255   		# Tenné (Tawny aka orange)
+R64, G40, B22, A255  	  	# Brown
+R244, G184, B12, A255  		# Or (Gold)
+R17, G53, B13, A255  		# Dark green
+R46, G114, B55, A255   		# Vert (Light Green)
+R18, G179, B113, A255 		# Teal
+R50, G173, B192, A255  		# Turqouise
+R30, G30, B128, A255   		# Azure ( Blue)
+R116, G198, B240, A255		# Bleu-Celeste (Sky Blue)
+R0, G68, B131, A255			# Reflex Blue variant (darker than current french)
+R200, G48, B40, A255		# Red 032 variant (darker than current french)
